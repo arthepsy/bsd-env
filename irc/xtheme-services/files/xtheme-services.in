@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: xtheme_services
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# xtheme_services_enable (bool):	Set to NO by default.
+#                               	Set it to YES to enable xtheme_services.
+# xtheme_services_config (path):	Set to %%PREFIX%%/etc/xtheme/xtheme.conf
+#                               	by default.
+# xtheme_services_datadir (path):	Set to /var/lib/xtheme by default.
+# xtheme_services_logfile (path):	Set to /var/log/xtheme/xtheme.log
+#                                	by default.
+# xtheme_services_user (login):		Set to ircservices by default.
+
+. /etc/rc.subr
+
+name=xtheme_services
+rcvar=xtheme_services_enable
+
+load_rc_config $name
+
+: ${xtheme_services_enable:="NO"}
+: ${xtheme_services_config="%%PREFIX%%/etc/xtheme/xtheme.conf"}
+: ${xtheme_services_datadir="/var/lib/xtheme"}
+: ${xtheme_services_logfile="/var/log/xtheme/xtheme.log"}
+: ${xtheme_services_user="ircservices"}
+
+command=%%PREFIX%%/bin/xtheme-services
+pidfile=/var/run/xtheme/xtheme-services.pid
+
+command_args="-p ${pidfile} -c ${xtheme_services_config} -l ${xtheme_services_logfile} -D ${xtheme_services_datadir} >/dev/null 2>&1"
+
+required_files="${xtheme_services_config}"
+
+start_precmd="xtheme_services_precmd"
+
+extra_commands="reload"
+
+xtheme_services_precmd()
+{
+	if [ ! -d ${xtheme_services_datadir} ]; then
+		install -d -o ${xtheme_services_user} -m 700 \
+			${xtheme_services_datadir}
+	fi
+	if [ ! -d ${xtheme_services_logfile%/*} ]; then
+		install -d -o ${xtheme_services_user} -m 700 \
+			${xtheme_services_logfile%/*}
+	fi
+	if [ ! -d /var/run/xtheme ]; then
+		install -d -o ${xtheme_services_user} /var/run/xtheme
+	fi
+}
+
+run_rc_command "$1"
