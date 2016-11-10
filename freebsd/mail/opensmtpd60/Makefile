@@ -2,7 +2,7 @@
 # $FreeBSD: head/mail/opensmtpd/Makefile 424103 2016-10-17 10:38:05Z ashish $
 
 PORTNAME=	opensmtpd
-PORTVERSION=	5.9.2p1
+PORTVERSION=	6.0.2p1
 PORTEPOCH=	1
 PORTREVISION=	1
 CATEGORIES=	mail
