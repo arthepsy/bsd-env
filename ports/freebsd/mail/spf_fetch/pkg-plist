@@ -1,0 +1,7 @@
+bin/spf_fetch
+bin/spf_mta_capture
+bin/spf_update_pf
+%%SIPCALC%%bin/spf_filter_sipcalc
+man/man1/spf_fetch.1.gz
+man/man1/spf_mta_capture.1.gz
+man/man1/spf_update_pf.1.gz
